@@ -1,0 +1,67 @@
+<!--
+  标签聚合页模板
+  特性：标签云 + 按标签分组的文章列表
+  数据: tagCloud (由 builder 预计算), manifest.tags
+-->
+
+<section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 min-h-screen">
+
+  <!-- 标题区 -->
+  <header class="text-center mb-12 animate-fade-in-up">
+    <h1 class="text-3xl sm:text-4xl font-extrabold font-heading mb-3" style="color: var(--text-primary)">标签</h1>
+    <p class="text-base" style="color: var(--text-secondary)">按标签浏览所有文章，共 {{tagCloud.length}} 个标签</p>
+  </header>
+
+  {{#if tagCloud}}
+  <!-- ========== 标签云 ========== -->
+  <div class="glass-card p-8 mb-12 text-center animate-fade-in-up" style="--stagger-index: 1">
+    <div class="flex flex-wrap justify-center gap-3" id="tag-cloud">
+      {{#each tagCloud}}
+      <a href="#tag-{{this.name}}" class="tag-pill hover:-translate-y-1 transition-transform duration-200"
+         style="--tag-size: {{this.fontSize}}rem; font-size: var(--tag-size)">
+        #{{this.name}} <sup class="ml-0.5 opacity-60">{{this.count}}</sup>
+      </a>
+      {{/each}}
+    </div>
+  </div>
+
+  <!-- ========== 按标签分组的文章列表 ========== -->
+  <div class="space-y-10">
+    {{#each manifest.tags}}
+    <section id="tag-{{@key}}" class="scroll-mt-24 animate-fade-in-up stagger-item">
+
+      <!-- 标签标题 -->
+      <div class="flex items-center gap-3 mb-4">
+        <span class="tag-pill tag-pill--emerald">#{{@key}}</span>
+        <span class="text-xs font-medium" style="color: var(--text-tertiary)">
+          共 {{this.length}} 篇文章
+        </span>
+        <div class="flex-1 h-px ml-2" style="background: linear-gradient(to right, var(--bg-glass-border), transparent);"></div>
+      </div>
+
+      <!-- 该标签下的文章列表 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {{#each this}}
+        <a href="{{this.url}}" class="glass-card p-4 flex gap-4 group hover:-translate-y-0.5 transition-all duration-200">
+          <div class="flex-1 min-w-0">
+            <h3 class="font-semibold line-clamp-1 group-hover:text-primary transition-colors" style="color: var(--text-primary)">{{this.title}}</h3>
+            <p class="text-sm mt-1 line-clamp-2" style="color: var(--text-secondary)">{{this.description}}</p>
+            <time class="text-xs mt-2 block" style="color: var(--text-tertiary)">{{this.date}}</time>
+          </div>
+        </a>
+        {{/each}}
+      </div>
+    </section>
+    {{/each}}
+  </div>
+
+  {{else}}
+  <!-- 空状态：无标签时显示 -->
+  <div class="glass-card p-12 text-center animate-fade-in-up">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto mb-4" style="color: var(--text-tertiary)"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+    <p style="color: var(--text-secondary)">还没有任何标签</p>
+    <p class="text-sm mt-1" style="color: var(--text-tertiary)">在文章的 frontmatter 中添加 tags 字段即可</p>
+  </div>
+  {{/if}}
+
+</section>

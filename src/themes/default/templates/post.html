@@ -1,0 +1,422 @@
+<!--
+  文章详情页模板
+  特性：阅读进度条 + 文章信息栏 + Markdown 正文 + TOC + 上下篇导航
+-->
+
+<!-- ========== 阅读进度条 ========== -->
+<div id="reading-progress" class="fixed top-0 left-0 right-0 h-[3px] z-[110] origin-left"
+     style="background: linear-gradient(90deg, var(--color-primary), var(--color-success)); transform: scaleX(0); transition: none;">
+</div>
+
+<article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
+
+  <!-- ========== 文章信息栏（毛玻璃卡片）========== -->
+  <header class="glass-card p-6 sm:p-8 mb-10 animate-fade-in-up">
+
+    <!-- 分类与标签行 -->
+    <div class="flex flex-wrap gap-2 mb-4">
+      {{#if post.categories}}
+      {{#each post.categories}}
+      <span class="tag-pill tag-pill--amber">{{this}}</span>
+      {{/each}}
+      {{/if}}
+      {{#if post.tags}}
+      {{#each post.tags}}
+      <span class="tag-pill tag-pill--rose">{{this}}</span>
+      {{/each}}
+      {{/if}}
+    </div>
+
+    <!-- 文章标题 -->
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-heading leading-tight mb-5" style="color: var(--text-primary)">
+      {{post.title}}
+    </h1>
+
+    <!-- 元信息：日期 / 作者 / 阅读时长 -->
+    <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm" style="color: var(--text-secondary)">
+      <time datetime="{{post.date}}" class="flex items-center gap-1.5">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+        {{post.date}}
+      </time>
+
+      <span class="flex items-center gap-1.5">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+        {{post.readingTime}} 分钟阅读
+      </span>
+
+      {{#if post.author}}
+      <span class="flex items-center gap-1.5">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        {{post.author}}
+      </span>
+      {{/if}}
+    </div>
+
+    <!-- 分享按钮 (可选) -->
+    {{#if config.features.share}}
+    <div class="mt-5 pt-4 border-t flex items-center justify-between" style="border-color: var(--bg-glass-border)">
+      <span class="text-xs font-medium uppercase tracking-wider" style="color: var(--text-tertiary)">分享文章</span>
+      <div class="flex gap-2">
+        <!-- Twitter/X -->
+        <button onclick="sharePost('twitter')" class="w-9 h-9 glass-btn p-0 text-xs" title="分享到 Twitter">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </button>
+        <!-- 复制链接 -->
+        <button onclick="sharePost('link')" class="w-9 h-9 glass-btn p-0 text-xs" title="复制链接">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </button>
+      </div>
+    </div>
+    {{/if}}
+
+  </header>
+
+  <!-- ========== 主内容区：Markdown 正文 + TOC 侧边栏 ========== -->
+  <div class="relative lg:flex lg:gap-10">
+
+    <!-- 文章正文 -->
+    <div class="flex-1 min-w-0 markdown-body animate-fade-in-up" style="--stagger-index: 1">
+      {{{post.content}}}
+    </div>
+
+    <!-- TOC 目录（右侧固定） -->
+    {{> toc}}
+
+  </div>
+
+  <!-- ========== 评论区 ========== -->
+  <section id="comments" class="mt-14">
+    <!-- 点赞按钮 -->
+    <div class="flex items-center gap-4 mb-8">
+      <button id="like-btn" onclick="toggleLike()" class="glass-btn flex items-center gap-2 group">
+        <svg id="like-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="transition-colors duration-200">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <span id="like-count" class="text-sm font-medium">0</span>
+        <span class="text-sm" style="color: var(--text-secondary)">喜欢</span>
+      </button>
+      <span class="text-xs" style="color: var(--text-tertiary)">点赞数据存储在本地浏览器中</span>
+    </div>
+
+    <!-- 评论 (Giscus) -->
+    <div class="glass-card p-6 sm:p-8">
+      <h3 class="text-lg font-bold font-heading mb-4 flex items-center gap-2" style="color: var(--text-primary)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        评论
+      </h3>
+      <p class="text-sm mb-4" style="color: var(--text-secondary)">
+        评论基于 GitHub Discussions，需要 GitHub 账号。在设置中配置 Giscus 仓库后即可启用。
+      </p>
+      <div id="giscus-container"></div>
+    </div>
+  </section>
+
+  <!-- ========== 上一篇 / 下一篇 导航 ========== -->
+  <nav class="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <a href="#" class="glass-card p-5 group hover:-translate-y-0.5 transition-transform duration-200" id="nav-prev">
+      <span class="text-xs font-medium uppercase tracking-wider block mb-2" style="color: var(--text-tertiary)">&larr; 上一篇</span>
+      <span class="font-semibold line-clamp-1 group-hover:text-primary transition-colors" style="color: var(--text-primary)">没有更早的文章了</span>
+    </a>
+    <a href="#" class="glass-card p-5 group hover:-translate-y-0.5 transition-transform duration-200 text-right sm:text-left" id="nav-next">
+      <span class="text-xs font-medium uppercase tracking-wider block mb-2" style="color: var(--text-tertiary)">下一篇 &rarr;</span>
+      <span class="font-semibold line-clamp-1 group-hover:text-primary transition-colors" style="color: var(--text-primary)">没有更新的文章了</span>
+    </a>
+  </nav>
+
+  <!-- 返回首页按钮 -->
+  <div class="mt-8 text-center">
+    <a href="{{config.baseUrl}}/" class="glass-btn--primary glass-btn inline-flex items-center gap-2">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      返回主页
+    </a>
+  </div>
+
+</article>
+
+<!-- Lightbox 图片灯箱遮罩 -->
+<div id="lightbox-overlay" class="fixed inset-0 bg-black/90 backdrop-blur-lg z-[120] hidden" style="display:none" onclick="closeLightbox()">
+  <button onclick="closeLightbox()" class="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-colors z-[121] flex items-center justify-center" aria-label="关闭">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+  </button>
+  <img id="lightbox-img" src="" alt="" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[92vw] max-h-[88vh] object-contain rounded-lg shadow-2xl" style="cursor:zoom-in" onclick="event.stopPropagation()" onmousedown="lightboxDragStart(event)">
+</div>
+
+<script>
+// ==================== 阅读进度条 ====================
+(function() {
+  const progressBar = document.getElementById('reading-progress');
+  if (!progressBar) return;
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const article = document.querySelector('.markdown-body');
+        if (!article) return;
+
+        const articleTop = article.offsetTop - window.innerHeight * 0.3;
+        const articleBottom = article.offsetTop + article.offsetHeight;
+        const scrollPos = window.scrollY;
+        const progress = Math.min(Math.max((scrollPos - articleTop) / (articleBottom - articleTop), 0), 1);
+
+        progressBar.style.transform = `scaleX(${progress})`;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+})();
+
+// ==================== 分享功能 ====================
+function sharePost(platform) {
+  const url = location.href;
+  const title = document.querySelector('article h1')?.textContent || '';
+
+  switch (platform) {
+    case 'twitter':
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`, '_blank');
+      break;
+    case 'link':
+      navigator.clipboard.writeText(url).then(() => showToast('链接已复制！'));
+      break;
+  }
+}
+
+function showToast(msg) {
+  // 简易 toast 提示
+  const el = document.createElement('div');
+  el.textContent = msg;
+  el.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 glass-card px-5 py-2.5 text-sm font-medium z-[130] animate-scale-in';
+  document.body.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 2000);
+}
+
+// ==================== Lightbox 图片灯箱 ====================
+let _lightboxScale = 1;
+let _lightboxDragging = false;
+let _lightboxStartX = 0, _lightboxStartY = 0;
+let _lightboxOffsetX = 0, _lightboxOffsetY = 0;
+
+function openLightbox(imgEl) {
+  const overlay = document.getElementById('lightbox-overlay');
+  const img = document.getElementById('lightbox-img');
+
+  if (!overlay || !img) return;
+
+  // 使用高清源（优先 data-src）
+  img.src = imgEl.dataset.src || imgEl.src || '';
+  img.alt = imgEl.alt || '';
+
+  // 重置缩放和偏移
+  _lightboxScale = 1;
+  _lightboxOffsetX = 0;
+  _lightboxOffsetY = 0;
+  img.style.transform = 'translate(-50%, -50%) scale(1)';
+  img.style.cursor = 'zoom-in';
+
+  overlay.style.display = 'block';
+  overlay.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  const overlay = document.getElementById('lightbox-overlay');
+  if (!overlay) return;
+
+  overlay.style.display = 'none';
+  overlay.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+// 点击图片本身可缩放
+document.addEventListener('click', function(e) {
+  const overlay = document.getElementById('lightbox-overlay');
+  if (!overlay || overlay.classList.contains('hidden')) return;
+
+  const img = document.getElementById('lightbox-img');
+  if (!img || e.target !== img) return;
+
+  // 点击图片切换缩放
+  if (_lightboxScale > 1) {
+    _lightboxScale = 1;
+    _lightboxOffsetX = 0;
+    _lightboxOffsetY = 0;
+    img.style.transform = 'translate(-50%, -50%) scale(1)';
+    img.style.cursor = 'zoom-in';
+  } else {
+    _lightboxScale = 2;
+    img.style.transform = 'translate(-50%, -50%) scale(2)';
+    img.style.cursor = 'zoom-out';
+  }
+  e.stopPropagation();
+});
+
+// 滚轮缩放
+document.addEventListener('wheel', function(e) {
+  const overlay = document.getElementById('lightbox-overlay');
+  if (!overlay || overlay.classList.contains('hidden')) return;
+
+  const img = document.getElementById('lightbox-img');
+  if (!img) return;
+
+  e.preventDefault();
+  const delta = e.deltaY > 0 ? 0.9 : 1.1;
+  _lightboxScale = Math.max(0.3, Math.min(5, _lightboxScale * delta));
+  img.style.transform = `translate(calc(-50% + ${_lightboxOffsetX}px), calc(-50% + ${_lightboxOffsetY}px)) scale(${_lightboxScale})`;
+}, { passive: false });
+
+// 拖拽移动
+function lightboxDragStart(e) {
+  if (_lightboxScale <= 1) return;
+  _lightboxDragging = true;
+  _lightboxStartX = e.clientX - _lightboxOffsetX;
+  _lightboxStartY = e.clientY - _lightboxOffsetY;
+  e.target.style.cursor = 'grabbing';
+}
+
+document.addEventListener('mousemove', function(e) {
+  if (!_lightboxDragging) return;
+  _lightboxOffsetX = e.clientX - _lightboxStartX;
+  _lightboxOffsetY = e.clientY - _lightboxStartY;
+  const img = document.getElementById('lightbox-img');
+  if (img) img.style.transform = `translate(calc(-50% + ${_lightboxOffsetX}px), calc(-50% + ${_lightboxOffsetY}px)) scale(${_lightboxScale})`;
+});
+
+document.addEventListener('mouseup', function() {
+  if (_lightboxDragging) {
+    _lightboxDragging = false;
+    const img = document.getElementById('lightbox-img');
+    if (img) img.style.cursor = _lightboxScale > 1 ? 'grab' : 'grab';
+  }
+});
+
+// ESC 关闭灯箱
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// ==================== 点赞功能 (localStorage) ====================
+function getLikeKey() {
+  return 'gp-like-' + window.location.pathname;
+}
+
+function toggleLike() {
+  const key = getLikeKey();
+  const liked = localStorage.getItem(key);
+  const btn = document.getElementById('like-btn');
+  const icon = document.getElementById('like-icon');
+  const countEl = document.getElementById('like-count');
+
+  if (liked) {
+    localStorage.removeItem(key);
+    btn.classList.remove('liked');
+    icon.setAttribute('fill', 'none');
+    icon.style.color = '';
+  } else {
+    localStorage.setItem(key, '1');
+    btn.classList.add('liked');
+    icon.setAttribute('fill', 'currentColor');
+    icon.style.color = '#ec4899';
+    // 弹跳动画
+    btn.style.transform = 'scale(1.15)';
+    setTimeout(() => { btn.style.transform = ''; }, 200);
+  }
+
+  // 统计当前文章点赞数（自己）
+  const isLiked = !liked;
+  countEl.textContent = isLiked ? '1' : '0';
+}
+
+// 初始化点赞状态
+(function() {
+  const key = getLikeKey();
+  const liked = localStorage.getItem(key);
+  const icon = document.getElementById('like-icon');
+  const countEl = document.getElementById('like-count');
+  const btn = document.getElementById('like-btn');
+  if (liked && icon && countEl && btn) {
+    icon.setAttribute('fill', 'currentColor');
+    icon.style.color = '#ec4899';
+    countEl.textContent = '1';
+    btn.classList.add('liked');
+  }
+})();
+
+// ==================== Giscus 评论加载 ====================
+(function() {
+  // 从设置中读取 Giscus 仓库配置
+  const repo = localStorage.getItem('gp-ai-provider'); // 暂用通用字段
+  // TODO: 专用 giscus-repo 配置项后启用
+  // 如果有 giscus 配置，动态加载脚本
+  const giscusRepo = localStorage.getItem('gp-giscus-repo');
+  if (giscusRepo) {
+    const container = document.getElementById('giscus-container');
+    if (container) {
+      const script = document.createElement('script');
+      script.src = 'https://giscus.app/client.js';
+      script.setAttribute('data-repo', giscusRepo);
+      script.setAttribute('data-repo-id', localStorage.getItem('gp-giscus-repo-id') || '');
+      script.setAttribute('data-category', localStorage.getItem('gp-giscus-category') || 'General');
+      script.setAttribute('data-category-id', localStorage.getItem('gp-giscus-category-id') || '');
+      script.setAttribute('data-mapping', 'pathname');
+      script.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') || 'light');
+      script.setAttribute('data-lang', 'zh-CN');
+      script.crossOrigin = 'anonymous';
+      script.async = true;
+      container.appendChild(script);
+    }
+  }
+})();
+
+// ==================== 代码块复制功能 ====================
+function copyCode(btn) {
+  const codeBlock = btn.closest('.code-block-wrapper');
+  if (!codeBlock) return;
+
+  // 优先从 data-raw 获取 base64 编码的原始代码，保证格式不变
+  let code = '';
+  const rawB64 = codeBlock.dataset.raw;
+  if (rawB64) {
+    try { code = decodeURIComponent(escape(atob(rawB64))); } catch(e) {
+      try { code = atob(rawB64); } catch(e2) { code = codeBlock.querySelector('code')?.textContent || ''; }
+    }
+  } else {
+    code = codeBlock.querySelector('code')?.textContent || '';
+  }
+
+  // 复制到剪贴板（兼容非 HTTPS 环境的 fallback）
+  const doCopy = (text) => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    // Fallback: 使用 textarea 方式
+    return new Promise((resolve) => {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;left:-9999px;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      resolve();
+    });
+  };
+
+  doCopy(code).then(() => {
+    btn.classList.add('copied');
+    const iconEl = btn.querySelector('.copy-icon');
+    const textEl = btn.querySelector('.copy-text');
+    if (iconEl) iconEl.innerHTML = '<polyline points="20,6 9,17 4,12"/>';
+    if (textEl) textEl.textContent = '已复制';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      if (iconEl) iconEl.innerHTML = '<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>';
+      if (textEl) textEl.textContent = '复制';
+    }, 2000);
+  });
+}
+
+// ==================== 上下篇导航数据注入（由构建脚本填充）==========
+(function() {
+  // 此处数据由 Builder 在 transformHTML 钩子中动态注入
+  // 或通过 BlogAPI 从 manifest.json 获取当前文章相邻文章
+})();
+</script>

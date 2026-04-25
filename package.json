@@ -1,0 +1,35 @@
+{
+    "name": "glazepress",
+    "version": "1.0.0",
+    "description": "基于 Vue 3 的 Markdown 静态博客站点生成器 (SSG) - Glassmorphism 设计",
+    "type": "module",
+    "main": "build.js",
+    "scripts": {
+        "build": "node build.js",
+        "dev": "node dev-server.js",
+        "build:watch": "node build.js --watch",
+        "build:prod": "node build.js --env=production",
+    "clean": "node build.js --clean"
+    },
+    "keywords": [
+        "ssg",
+        "blog",
+        "static-site",
+        "vue3",
+        "markdown",
+        "glassmorphism"
+    ],
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "marked": "^12.0.0",
+        "gray-matter": "^4.0.3",
+        "dompurify": "^3.0.8",
+        "fs-extra": "^11.2.0",
+        "chokidar": "^3.6.0",
+        "live-server": "^1.2.2"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}

@@ -1,0 +1,93 @@
+<!--
+  友链页面
+  特性：友链卡片网格 + 网站图标 + hover 动画
+-->
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
+  <div class="text-center mb-10 animate-fade-in-up">
+    <h1 class="text-3xl sm:text-4xl font-extrabold font-heading mb-3" style="color: var(--text-primary)">友情链接</h1>
+    <p class="text-base" style="color: var(--text-secondary)">互相推荐，共同进步</p>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 stagger-container">
+
+    <!-- Bing -->
+    <a href="https://www.bing.com" target="_blank" rel="noopener noreferrer"
+       class="glass-card p-5 group hover-lift transition-all duration-300 stagger-item flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center">
+        <img src="https://www.bing.com/favicon.ico" alt="Bing" class="w-8 h-8" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:24px\'>🔍</span>'">
+      </div>
+      <div class="min-w-0">
+        <h3 class="font-bold text-sm group-hover:text-primary transition-colors" style="color: var(--text-primary)">Bing</h3>
+        <p class="text-xs truncate" style="color: var(--text-tertiary)">微软搜索引擎</p>
+      </div>
+    </a>
+
+    <!-- Yandex -->
+    <a href="https://yandex.com" target="_blank" rel="noopener noreferrer"
+       class="glass-card p-5 group hover-lift transition-all duration-300 stagger-item flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-gradient-to-br from-red-500/20 to-yellow-500/20 flex items-center justify-center">
+        <img src="https://yandex.com/favicon.ico" alt="Yandex" class="w-8 h-8" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:24px\'>🌐</span>'">
+      </div>
+      <div class="min-w-0">
+        <h3 class="font-bold text-sm group-hover:text-primary transition-colors" style="color: var(--text-primary)">Yandex</h3>
+        <p class="text-xs truncate" style="color: var(--text-tertiary)">俄罗斯搜索引擎</p>
+      </div>
+    </a>
+
+    <!-- Google -->
+    <a href="https://www.google.com" target="_blank" rel="noopener noreferrer"
+       class="glass-card p-5 group hover-lift transition-all duration-300 stagger-item flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-gradient-to-br from-blue-400/20 to-green-500/20 flex items-center justify-center">
+        <img src="https://www.google.com/favicon.ico" alt="Google" class="w-8 h-8" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:24px\'>🔍</span>'">
+      </div>
+      <div class="min-w-0">
+        <h3 class="font-bold text-sm group-hover:text-primary transition-colors" style="color: var(--text-primary)">Google</h3>
+        <p class="text-xs truncate" style="color: var(--text-tertiary)">全球搜索引擎</p>
+      </div>
+    </a>
+
+    <!-- GitHub -->
+    <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+       class="glass-card p-5 group hover-lift transition-all duration-300 stagger-item flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-gradient-to-br from-gray-500/20 to-purple-500/20 flex items-center justify-center">
+        <img src="https://github.com/favicon.ico" alt="GitHub" class="w-8 h-8" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:24px\'>🐙</span>'">
+      </div>
+      <div class="min-w-0">
+        <h3 class="font-bold text-sm group-hover:text-primary transition-colors" style="color: var(--text-primary)">GitHub</h3>
+        <p class="text-xs truncate" style="color: var(--text-tertiary)">代码托管平台</p>
+      </div>
+    </a>
+
+    <!-- MDN -->
+    <a href="https://developer.mozilla.org" target="_blank" rel="noopener noreferrer"
+       class="glass-card p-5 group hover-lift transition-all duration-300 stagger-item flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-gradient-to-br from-indigo-500/20 to-blue-500/20 flex items-center justify-center">
+        <img src="https://developer.mozilla.org/favicon-48x48.png" alt="MDN" class="w-8 h-8" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:24px\'>📖</span>'">
+      </div>
+      <div class="min-w-0">
+        <h3 class="font-bold text-sm group-hover:text-primary transition-colors" style="color: var(--text-primary)">MDN</h3>
+        <p class="text-xs truncate" style="color: var(--text-tertiary)">Web 开发者文档</p>
+      </div>
+    </a>
+
+    <!-- Stack Overflow -->
+    <a href="https://stackoverflow.com" target="_blank" rel="noopener noreferrer"
+       class="glass-card p-5 group hover-lift transition-all duration-300 stagger-item flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-gradient-to-br from-orange-500/20 to-amber-500/20 flex items-center justify-center">
+        <img src="https://cdn.sstatic.net/Sites/stackoverflow/Img/favicon.ico" alt="Stack Overflow" class="w-8 h-8" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:24px\'>📚</span>'">
+      </div>
+      <div class="min-w-0">
+        <h3 class="font-bold text-sm group-hover:text-primary transition-colors" style="color: var(--text-primary)">Stack Overflow</h3>
+        <p class="text-xs truncate" style="color: var(--text-tertiary)">编程问答社区</p>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- 交换友链提示 -->
+  <div class="glass-card p-6 mt-10 text-center animate-fade-in-up">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto mb-3" style="color: var(--color-primary)"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <h3 class="font-bold mb-2" style="color: var(--text-primary)">交换友链</h3>
+    <p class="text-sm" style="color: var(--text-secondary)">欢迎交换友链！请在评论区留言，格式：站点名称 + URL + 描述。</p>
+  </div>
+</section>

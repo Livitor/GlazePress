@@ -1,0 +1,111 @@
+<!--
+  首页模板
+  特性：全屏背景 + 博主信息区 + 文章卡片网格 + 标签云 + 搜索入口
+  页面变量: page_content (注入到 layout.html 的 main 区域)
+-->
+<section class="relative min-h-screen">
+
+  <!-- ========== 全屏 Hero 背景区域 ========== -->
+  <div class="hero-section relative overflow-hidden">
+    <!-- 背景图/渐变 -->
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
+         style="background-image: url('{{config.theme.background.image}}'); background-size: cover; background-position: center;">
+    </div>
+    <!-- 暗色遮罩 -->
+    <div class="absolute inset-0" style="--overlay: {{config.theme.background.overlayColor}}; background: linear-gradient(135deg, var(--overlay) 0%, rgba(30, 27, 75, 0.7) 50%, var(--overlay) 100%);"></div>
+
+    <!-- 装饰性光斑 (纯 CSS) -->
+    <div class="absolute top-20 right-20 w-72 h-72 rounded-full opacity-20 blur-3xl animate-float" style="background: var(--color-primary);"></div>
+    <div class="absolute bottom-10 left-10 w-56 h-56 rounded-full opacity-[0.15] blur-3xl animate-float" style="background: #ec4899; animation-delay: 1s;"></div>
+
+    <!-- 博主信息区 -->
+    <div class="relative z-10 flex flex-col items-center justify-center min-h-[85vh] text-center px-4 pt-16 pb-12">
+
+      <!-- 头像（双环发光效果） -->
+      <div class="relative mb-8 animate-fade-in-up" style="--stagger-index: 0">
+        <!-- 外层光圈 -->
+        <div class="absolute -inset-3 rounded-full opacity-30 blur-md animate-pulse" style="background: linear-gradient(135deg, var(--color-primary), var(--color-accent))"></div>
+        <a href="{{config.baseUrl}}/about/" class="group block relative">
+          <div class="w-32 h-32 rounded-full p-[3px] relative" style="background: linear-gradient(135deg, var(--color-primary), var(--color-accent))">
+            <div class="w-full h-full rounded-full p-[3px] bg-black/20">
+              <img src="{{config.author.avatar}}"
+                   alt="{{config.author.name}}"
+                   loading="eager"
+                   decoding="async"
+                   class="w-full h-full object-cover rounded-full transition-transform duration-500 group-hover:scale-105"
+                   onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\'w-full h-full rounded-full flex items-center justify-center\' style=\'background:linear-gradient(135deg,#8b5cf6,#ec4899)\'><svg width=\'48\' height=\'48\' viewBox=\'0 0 24 24\' fill=\'white\'><path d=\'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z\'/></svg></div>'">
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- 昵称 & 简介 -->
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-3 tracking-tight animate-fade-in-up" style="--stagger-index: 1">
+        {{config.author.name}}
+      </h1>
+      <p class="text-base sm:text-lg text-white/70 max-w-lg leading-relaxed mb-8 animate-fade-in-up" style="--stagger-index: 2">
+        {{config.author.bio}}
+      </p>
+
+      <!-- 社交图标链接 -->
+      <div class="flex items-center gap-3 mb-8 animate-fade-in-up flex-wrap justify-center" style="--stagger-index: 3">
+        {{#if config.author.social.github}}
+        <a href="{{config.author.social.github}}" target="_blank" rel="noopener noreferrer"
+           class="social-icon-btn glass-btn p-0 border-white/20 text-white hover:bg-white/20 hover:text-white transition-all hover:scale-110" aria-label="GitHub">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        </a>
+        {{/if}}
+        {{#if config.author.social.gitee}}
+        <a href="{{config.author.social.gitee}}" target="_blank" rel="noopener noreferrer"
+           class="social-icon-btn glass-btn p-0 border-white/20 text-white hover:bg-white/20 hover:text-white transition-all hover:scale-110" aria-label="Gitee">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.984 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.016 0zm6.09 5.333c.328 0 .593.266.592.593v1.482a.594.594 0 0 1-.593.592H9.777c-.982 0-1.778.796-1.778 1.778v5.926c0 .982.796 1.778 1.778 1.778h8.296a.593.593 0 0 1 .593.592v1.482a.594.594 0 0 1-.593.593H9.777a4.444 4.444 0 0 1-4.444-4.444V9.481a4.444 4.444 0 0 1 4.444-4.444h8.297z"/></svg>
+        </a>
+        {{/if}}
+        {{#if config.author.social.bilibili}}
+        <a href="{{config.author.social.bilibili}}" target="_blank" rel="noopener noreferrer"
+           class="social-icon-btn glass-btn p-0 border-white/20 text-white hover:bg-white/20 hover:text-white transition-all hover:scale-110" aria-label="Bilibili">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/></svg>
+        </a>
+        {{/if}}
+        {{#if config.author.social.email}}
+        <a href="{{config.author.social.email}}" class="social-icon-btn glass-btn p-0 border-white/20 text-white hover:bg-white/20 hover:text-white transition-all hover:scale-110" aria-label="Email">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </a>
+        {{/if}}
+        <a href="{{config.baseUrl}}/friends/" class="social-icon-btn glass-btn p-0 border-white/20 text-white hover:bg-white/20 hover:text-white transition-all hover:scale-110" aria-label="友链">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </a>
+      </div>
+
+      <!-- 向下滚动提示 -->
+      <div class="animate-bounce mt-4">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-opacity="50"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 文章列表区 ========== -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-10 pb-16">
+    <div class="text-center mb-10">
+      <h2 class="text-2xl font-bold font-heading mb-2" style="color: var(--text-primary)">最新文章</h2>
+      <p class="text-sm" style="color: var(--text-tertiary)">探索技术世界，分享思考与发现</p>
+    </div>
+
+    <!-- 文章卡片网格 -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 stagger-container">
+      {{#each posts}}
+      {{> post-card}}
+      {{/each}}
+    </div>
+
+    {{#if posts}}
+    {{else}}
+    <div class="glass-card p-12 text-center">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto mb-4" style="color: var(--text-tertiary)"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14,2 14,8 20,8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/></svg>
+      <p style="color: var(--text-secondary)">还没有发布任何文章</p>
+      <p class="text-sm mt-1" style="color: var(--text-tertiary)">在 src/posts/ 目录下创建 .md 文件开始写作吧！</p>
+    </div>
+    {{/if}}
+  </section>
+
+</section>

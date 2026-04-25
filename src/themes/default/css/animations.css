@@ -1,0 +1,250 @@
+/**
+ * GlazePress - 动画关键帧定义
+ *
+ * 设计原则：
+ * - 所有动画必须 60fps（仅使用 transform 和 opacity）
+ * - GPU 加速属性优先
+ * - 尊重 prefers-reduced-motion 媒体查询
+ * - 动画时长控制在 200ms-500ms 范围
+ */
+
+/* ==================== 页面加载动画 ==================== */
+
+/* 淡入上浮（卡片/列表项入场） */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 400ms ease-out both;
+  will-change: opacity, transform;
+}
+
+/* 淡入（通用） */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 350ms ease-out both;
+  will-change: opacity;
+}
+
+/* 缩放入场 */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 300ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  will-change: opacity, transform;
+}
+
+/* 从右滑入（侧边栏/导航） */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 350ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  will-change: opacity, transform;
+}
+
+/* ==================== 交互微动画 ==================== */
+
+/* 卡片悬浮上浮 */
+@keyframes cardHoverLift {
+  to {
+    transform: translateY(-4px);
+  }
+}
+
+/* 脉冲发光效果（用于强调元素） */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0 rgba(99, 102, 241, 0.3),
+      0 4px 6px -1px var(--shadow-color);
+  }
+  50% {
+    box-shadow:
+      0 0 20px 3px rgba(99, 102, 241, 0.15),
+      0 8px 15px -3px var(--shadow-strong);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+  will-change: box-shadow;
+}
+
+/* 阅读进度条渐变流动 */
+@keyframes progressBarShimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* ==================== 加载状态 ==================== */
+
+/* 旋转加载指示器 */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 800ms linear infinite;
+  will-change: transform;
+}
+
+/* 骨架屏闪烁 */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 25%,
+    rgba(255,255,255,0.3) 50%,
+    var(--bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+[data-theme="dark"] .skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(30,41,59,0.6) 25%,
+    rgba(51,65,85,0.5) 50%,
+    rgba(30,41,59,0.6) 75%
+  );
+  background-size: 200% 100%;
+}
+
+/* ==================== 特殊效果 ==================== */
+
+/* 打字机光标闪烁 */
+@keyframes cursorBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.animate-cursor-blink::after {
+  content: '|';
+  animation: cursorBlink 1s step-end infinite;
+  color: var(--color-primary);
+  font-weight: 100;
+}
+
+/* 浮动动画（用于装饰元素） */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* 渐变背景流动 */
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient-flow {
+  background-size: 200% 200%;
+  animation: gradientFlow 4s ease infinite;
+}
+
+/* ==================== Stagger 工具类 ====================
+ * 配合 JS 使用：为子元素添加递增的延迟
+ * 用法: <div class="stagger-container" data-stagger="50">
+ *         <div class="stagger-item">item</div>
+ *       </div>
+ */
+
+.stagger-item {
+  --stagger-delay: calc(var(--stagger-index, 0) * 50ms);
+  animation-delay: var(--stagger-delay);
+}
+
+/* JS 会自动为每个 .stagger-item 设置 --stagger-index */
+
+/* ==================== 暗色切换旋转动画 ==================== */
+
+@keyframes rotateIn {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+}
+
+.theme-icon-enter {
+  animation: rotateIn 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ==================== Lightbox 灯箱动画 ==================== */
+
+@keyframes lightboxOpen {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.lightbox-animate-in {
+  animation: lightboxOpen 250ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  will-change: opacity, transform;
+}
+
+@keyframes lightboxClose {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.lightbox-animate-out {
+  animation: lightboxClose 180ms ease-in both;
+}

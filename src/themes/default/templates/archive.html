@@ -1,0 +1,102 @@
+<!--
+  归档页模板（按年份时间线）
+  特性：时间线布局 + 年份折叠 + 文章数量统计
+-->
+
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 min-h-screen">
+
+  <!-- 标题区 -->
+  <header class="text-center mb-12 animate-fade-in-up">
+    <h1 class="text-3xl sm:text-4xl font-extrabold font-heading mb-3" style="color: var(--text-primary)">归档</h1>
+    <p class="text-base" style="color: var(--text-secondary)">
+      共 {{manifest.stats.totalPosts}} 篇文章，从 {{manifest.stats.firstPostDate}} 至今
+    </p>
+  </header>
+
+  <!-- ========== 时间线归档 ========== -->
+  <div class="relative">
+    <!-- 时间线竖线 -->
+    <div class="absolute left-[19px] top-0 bottom-0 w-px" style="background: linear-gradient(to bottom, var(--color-primary), transparent);"></div>
+
+    {{#each manifest.archive}}
+    <section class="mb-10 animate-fade-in-up stagger-item">
+
+      <!-- 年份标题 -->
+      <div class="flex items-center gap-3 mb-5 cursor-pointer group" onclick="toggleArchiveYear('{{@key}}')">
+        <!-- 时间线节点 -->
+        <div class="w-[39px] flex justify-center z-10 relative">
+          <div class="w-4 h-4 rounded-full ring-2 bg-primary/20 ring-primary/30 group-hover:bg-primary transition-colors duration-200"></div>
+        </div>
+        <h2 class="text-xl font-bold font-heading" style="color: var(--text-primary)">{{@key}}</h2>
+        <span class="glass-card text-xs px-2.5 py-0.5 rounded-full font-medium" style="color: var(--text-secondary)">
+          {{this.length}} 篇
+        </span>
+        <!-- 折叠箭头 -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             class="ml-auto transform transition-transform duration-300 archive-chevron" id="chevron-{{@key}}">
+          <path d="m6 9 6 6 6-6"/>
+        </svg>
+      </div>
+
+      <!-- 该年份的文章列表 -->
+      <ul class="ml-[39px] space-y-1.5 archive-year-content" id="year-{{@key}}" style="--stagger-index: {{@index}}">
+        {{#each this}}
+        <li>
+          <a href="{{this.url}}"
+             class="group/link glass-card p-3.5 block hover:-translate-x-1 transition-all duration-200">
+            <div class="flex items-start justify-between gap-3">
+              <span class="font-medium line-clamp-1 group-hover/link:text-primary transition-colors" style="color: var(--text-primary)">
+                {{this.title}}
+              </span>
+              <time class="text-xs whitespace-nowrap pt-0.5" style="color: var(--text-tertiary)">{{this.date}}</time>
+            </div>
+          </a>
+        </li>
+        {{/each}}
+      </ul>
+    </section>
+    {{/each}}
+
+    {{#if (eq manifest.stats.totalPosts 0)}}
+    <div class="glass-card p-12 text-center ml-[39px]">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto mb-4" style="color: var(--text-tertiary)"><path d="M3 4h18v16H3z"/><path d="M3 8h18"/><path d="M8 4v4"/></svg>
+      <p style="color: var(--text-secondary)">还没有任何文章归档</p>
+      <p class="text-sm mt-1" style="color: var(--text-tertiary)">创建第一篇文章开始你的写作之旅</p>
+    </div>
+    {{/if}}
+  </div>
+</section>
+
+<script>
+// 折叠/展开年份
+function toggleArchiveYear(year) {
+  const content = document.getElementById(`year-${year}`);
+  const chevron = document.getElementById(`chevron-${year}`);
+
+  if (!content || !chevron) return;
+
+  const isHidden = content.style.display === 'none';
+
+  if (isHidden) {
+    // 展开：使用动画
+    content.style.display = '';
+    content.style.maxHeight = content.scrollHeight + 'px';
+    content.style.opacity = '1';
+    chevron.style.transform = 'rotate(0deg)';
+  } else {
+    // 折叠
+    content.style.maxHeight = '0';
+    content.style.opacity = '0';
+    chevron.style.transform = 'rotate(-90deg)';
+    setTimeout(() => { content.style.display = 'none'; }, 300);
+  }
+}
+
+// 默认展开所有年份
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.archive-year-content').forEach(el => {
+    el.style.transition = 'max-height 0.35s ease, opacity 0.25s ease, overflow 0s';
+    el.style.overflow = 'hidden';
+  });
+});
+</script>

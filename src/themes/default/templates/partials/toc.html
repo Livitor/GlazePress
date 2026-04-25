@@ -1,0 +1,115 @@
+<!--
+  目录 (TOC) 组件
+  特性：右侧固定毛玻璃面板 + 滚动高亮进度 + 点击平滑滚动 + 阅读进度条
+  移动端折叠为顶部按钮
+
+  预期上下文变量:
+    - post.toc (TOC HTML 字符串)
+-->
+{{#if config.features.toc}}
+
+<!-- 桌面端固定 TOC -->
+<aside id="toc-desktop" class="hidden xl:block fixed right-6 top-1/2 -translate-y-1/2 w-60 z-30">
+  <nav class="glass-card p-4 relative overflow-hidden">
+    <!-- 顶部阅读进度条 -->
+    <div class="absolute top-0 left-0 right-0 h-[2px]" style="background: var(--bg-glass-border)">
+      <div id="toc-progress-bar" class="h-full transition-all duration-200 ease-out" style="background: linear-gradient(90deg, var(--color-primary), var(--color-accent)); width: 0%;"></div>
+    </div>
+
+    <h4 class="text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2" style="color: var(--text-tertiary)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+      目录
+      <span id="toc-reading-pct" class="ml-auto text-xs font-normal" style="color: var(--text-tertiary)">0%</span>
+    </h4>
+    <div class="toc-container max-h-[55vh] overflow-y-auto pr-1" style="scrollbar-width: thin; scrollbar-color: var(--bg-glass-border) transparent" id="toc-scroll-container">
+      {{{post.toc}}}
+    </div>
+  </nav>
+</aside>
+
+<!-- 移动端 TOC 折叠按钮 -->
+<div class="xl:hidden sticky top-[calc(var(--navbar-height)+12px)] z-20 mb-4">
+  <button onclick="toggleTOCMobile()" class="w-full glass-btn text-sm font-medium">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mr-1.5"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    文章目录
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ml-auto transition-transform duration-200" id="toc-chevron"><path d="m6 9 6 6 6-6"/></svg>
+  </button>
+
+  <!-- 移动端 TOC 下拉内容 -->
+  <div id="toc-mobile" class="glass-card mt-2 p-4 hidden animate-scale-in origin-top">
+    <div class="toc-container">
+      {{{post.toc}}}
+    </div>
+  </div>
+</div>
+
+<style>
+  /* TOC 样式 */
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toc-item {
+    position: relative;
+    padding-left: 0;
+    margin-bottom: 0;
+  }
+  .toc-item:not(:last-child) { margin-bottom: 2px; }
+
+  .toc-link {
+    display: block;
+    padding: 4px 8px 4px 14px;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    border-left: 2px solid var(--bg-glass-border);
+    border-radius: 0 4px 4px 0;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
+
+  .toc-link:hover {
+    color: var(--color-primary);
+    background: rgba(139, 92, 246, 0.06);
+    border-left-color: var(--color-primary-light);
+  }
+
+  .toc-item.active > .toc-link {
+    color: var(--color-primary);
+    background: rgba(139, 92, 246, 0.08);
+    border-left-color: var(--color-primary);
+    font-weight: 500;
+  }
+
+  /* 已读过的目录项标记 */
+  .toc-item.read > .toc-link {
+    color: var(--text-tertiary);
+  }
+  .toc-item.active.read > .toc-link {
+    color: var(--color-primary);
+  }
+
+  /* 缩进层级 */
+  .toc-level-3 .toc-link { padding-left: 26px; font-size: 0.78rem; }
+  .toc-level-4 .toc-link, .toc-level-5 .toc-link, .toc-level-6 .toc-link { padding-left: 38px; font-size: 0.75rem; color: var(--text-tertiary); }
+</style>
+<script>
+function toggleTOCMobile() {
+  const panel = document.getElementById('toc-mobile');
+  const chevron = document.getElementById('toc-chevron');
+  if (panel.classList.contains('hidden')) {
+    panel.classList.remove('hidden');
+    chevron.style.transform = 'rotate(180deg)';
+  } else {
+    panel.classList.add('hidden');
+    chevron.style.transform = 'rotate(0deg)';
+  }
+}
+</script>
+
+{{/if}}

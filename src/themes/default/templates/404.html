@@ -1,0 +1,53 @@
+<!--
+  自定义 404 页面
+  特性：毛玻璃装饰 + 友好提示 + 返回首页按钮
+-->
+
+<section class="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
+
+  <!-- 背景装饰光斑 -->
+  <div class="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl animate-float" style="background: var(--color-primary);"></div>
+  <div class="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full opacity-10 blur-3xl animate-float" style="background: #ec4899; animation-delay: 2s;"></div>
+
+  <div class="text-center max-w-lg relative z-10">
+
+    <!-- 404 数字 -->
+    <div class="mb-8 animate-scale-in">
+      <h1 class="text-[10rem] sm:text-[13rem] font-extrabold font-heading leading-none select-none"
+          style="background: linear-gradient(135deg, var(--color-primary) 0%, #a78bfa 50%, var(--color-danger) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        404
+      </h1>
+    </div>
+
+    <!-- 信息卡片 -->
+    <div class="glass-card p-8 mb-8 animate-fade-in-up" style="--stagger-index: 1">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto mb-4" style="color: var(--color-primary)">
+        <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/>
+      </svg>
+      <h2 class="text-xl font-bold font-heading mb-2" style="color: var(--text-primary)">页面走丢了</h2>
+      <p class="text-sm leading-relaxed" style="color: var(--text-secondary)">
+        抱歉，你访问的页面不存在或已被移除。<br>
+        请检查 URL 是否正确，或返回首页重新开始。
+      </p>
+    </div>
+
+    <!-- 操作按钮 -->
+    <div class="flex items-center justify-center gap-4 animate-fade-in-up" style="--stagger-index: 2">
+      <a href="{{config.baseUrl}}/" class="glass-btn--primary glass-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        返回首页
+      </a>
+      <button onclick="history.back()" class="glass-btn--ghost glass-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        返回上页
+      </button>
+    </div>
+
+    <!-- 搜索提示 -->
+    <p class="mt-6 text-xs animate-fade-in-up" style="color: var(--text-tertiary); --stagger-index: 3">
+      或使用
+      <button onclick="BlogAPI.openSearch()" class="underline hover:text-primary transition-colors">搜索功能</button>
+      查找你需要的内容
+    </p>
+  </div>
+</section>
